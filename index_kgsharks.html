@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Официальный покер-рум в Кыргызстане</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px 20px;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      text-align: center;
+    }
+    .photo-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 30px auto;
+      border: 4px solid #d4af37;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
+    }
+    .photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 25px;
+      font-weight: bold;
+      color: #111;
+    }
+    .telegram-button {
+      background: linear-gradient(135deg, #ff0000, #b22222);
+      color: #fff;
+      padding: 15px 35px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .telegram-button:hover {
+      background: linear-gradient(135deg, #ff4d4d, #cc0000);
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+    .loading {
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+
+  // ОТКЛЮЧАЕМ автоматические события (Lead, Purchase и т.д.)
+  // Оставляем только ручные события (PageView, кастомные)
+  fbq('init', '1897263797606299', {
+    autoConfig: false,  // отключить авто-детектирование событий
+    disablePushState: true  // отключить авто-трекинг навигации
+  });
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1897263797606299&ev=PageView&noscript=1"
+  /></noscript>
+</head>
+<body>
+  <div class="photo-circle">
+    <img src="poker.jpg" alt="Покер-рум" />
+  </div>
+  <h1>Официальный покер-рум в Кыргызстане</h1>
+  <a id="telegramButton" class="telegram-button" href="https://t.me/KGSharksPoker_bot" target="_blank" rel="noopener noreferrer">Присоединиться в Telegram</a>
+  <div id="loading" class="loading" style="display:none;">Загрузка...</div>
+
+  <script>
+  // ========================================
+  // УЛУЧШЕННАЯ СИСТЕМА СБОРА ДАННЫХ ДЛЯ EMQ
+  // ========================================
+
+  /**
+   * Получить Facebook Browser Pixel cookie (_fbp)
+   * Facebook Pixel создает этот cookie автоматически
+   * Формат: fb.2.{timestamp}.{random_id}
+   */
+  function getFacebookBrowserPixel() {
+    const cookies = document.cookie.split('; ');
+    for (let cookie of cookies) {
+      if (cookie.startsWith('_fbp=')) {
+        return cookie.substring(5);
+      }
+    }
+
+    // Если _fbp не существует, создаем его
+    // Генерируем случайный ID браузера
+    const timestamp = Date.now();
+    const randomId = Math.random().toString().substring(2) + Math.random().toString().substring(2);
+    const fbp = `fb.2.${timestamp}.${randomId}`;
+
+    // Сохраняем cookie на 90 дней (стандарт Facebook)
+    document.cookie = `_fbp=${fbp}; max-age=7776000; path=/`;
+    return fbp;
+  }
+
+  /**
+   * Получить Facebook Click cookie (_fbc)
+   * Создается при клике по Facebook рекламе
+   * Формат: fb.1.{timestamp}.{fbclid}
+   * ВАЖНО: Работает и для fbclid И для brid параметров!
+   */
+  function getFacebookClickCookie() {
+    // Если в URL есть свежий fbclid/brid, он важнее старого _fbc cookie.
+    // Иначе тесты и повторные заходы могут сохранить старый мусорный fbc.
+    const urlParams = new URLSearchParams(window.location.search);
+    const fbclid = urlParams.get('fbclid');
+    const brid = urlParams.get('brid');
+    const trackingId = fbclid || brid;  // Берем любой доступный параметр
+
+    if (trackingId) {
+      const fbc = `fb.2.${Date.now()}.${trackingId}`;  // fb.2 для fbc (не fb.1!)
+      // Сохраняем cookie на 90 дней (стандарт Facebook)
+      document.cookie = `_fbc=${fbc}; max-age=7776000; path=/`;
+      return fbc;
+    }
+
+    return null;
+  }
+
+  /**
+   * Собрать все метаданные браузера
+   */
+  function collectBrowserMetadata() {
+    return {
+      // User Agent
+      user_agent: navigator.userAgent,
+
+      // Язык
+      language: navigator.language || navigator.userLanguage,
+      languages: navigator.languages ? navigator.languages.join(',') : navigator.language,
+
+      // Timezone
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timezone_offset: new Date().getTimezoneOffset(),
+
+      // Screen
+      screen_width: window.screen.width,
+      screen_height: window.screen.height,
+      screen_available_width: window.screen.availWidth,
+      screen_available_height: window.screen.availHeight,
+      screen_color_depth: window.screen.colorDepth,
+      screen_pixel_depth: window.screen.pixelDepth,
+
+      // Viewport
+      viewport_width: window.innerWidth,
+      viewport_height: window.innerHeight,
+
+      // Platform
+      platform: navigator.platform,
+      vendor: navigator.vendor,
+
+      // Hardware
+      device_memory: navigator.deviceMemory || null,
+      cpu_cores: navigator.hardwareConcurrency || null,
+
+      // Connection
+      connection_type: navigator.connection ? navigator.connection.effectiveType : null,
+      connection_downlink: navigator.connection ? navigator.connection.downlink : null,
+      connection_rtt: navigator.connection ? navigator.connection.rtt : null,
+
+      // Device detection
+      is_mobile: /Mobile|Android|iPhone|iPad|iPod/i.test(navigator.userAgent),
+      is_tablet: /iPad|Android.*Tablet/i.test(navigator.userAgent),
+      is_desktop: !/Mobile|Android|iPhone|iPad|iPod/i.test(navigator.userAgent),
+      is_touch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0),
+
+      // Capabilities
+      cookies_enabled: navigator.cookieEnabled,
+      do_not_track: navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || null
+    };
+  }
+
+  /**
+   * Собрать UTM параметры из URL
+   */
+  function collectUTMParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+      utm_source: urlParams.get('utm_source'),
+      utm_medium: urlParams.get('utm_medium'),
+      utm_campaign: urlParams.get('utm_campaign'),
+      utm_content: urlParams.get('utm_content'),
+      utm_term: urlParams.get('utm_term'),
+      utm_id: urlParams.get('utm_id'),
+
+      // Ad platform tracking IDs
+      gclid: urlParams.get('gclid'),  // Google
+      ttclid: urlParams.get('ttclid'), // TikTok
+      msclkid: urlParams.get('msclkid') // Bing
+    };
+  }
+
+  /**
+   * Получить IP адрес пользователя (с fallback через Promise.race)
+   * Запускаем ВСЕ API параллельно, берем первый успешный ответ
+   * Это БЫСТРЕЕ чем последовательные попытки!
+   */
+  async function getClientIP() {
+    const apis = [
+      { url: 'https://api.ipify.org?format=json', parser: (d) => d.ip },
+      { url: 'https://ipinfo.io/json', parser: (d) => d.ip },
+      { url: 'https://api.ip.sb/jsonip', parser: (d) => d.ip }
+    ];
+
+    // Создаем промисы для всех API
+    const promises = apis.map(api =>
+      fetch(api.url, { method: 'GET', cache: 'no-cache' })
+        .then(r => {
+          if (!r.ok) throw new Error('API failed');
+          return r.json();
+        })
+        .then(data => {
+          const ip = api.parser(data);
+          if (!ip) throw new Error('No IP in response');
+          return ip;
+        })
+    );
+
+    try {
+      // Promise.any - берем ПЕРВЫЙ успешный результат
+      const ip = await Promise.any(promises);
+      return ip;
+    } catch (error) {
+      console.warn('All IP APIs failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Получить геолокацию через IP (опционально)
+   */
+  async function getGeoFromIP(ip) {
+    if (!ip) return null;
+
+    try {
+      const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+        method: 'GET',
+        cache: 'no-cache'
+      });
+
+      if (!response.ok) {
+        throw new Error('Geo API failed');
+      }
+
+      const data = await response.json();
+      return {
+        country: data.country_name || null,
+        country_code: data.country_code || null,
+        city: data.city || null,
+        region: data.region || null,
+        postal_code: data.postal || null,
+        latitude: data.latitude || null,
+        longitude: data.longitude || null,
+        timezone: data.timezone || null
+      };
+    } catch (error) {
+      console.warn('Failed to get geo data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Получить Performance метрики
+   * ИСПРАВЛЕНО: проверяем что значения валидны (не 0)
+   */
+  function getPerformanceMetrics() {
+    if (!performance.timing) return {};
+
+    const timing = performance.timing;
+    const navStart = timing.navigationStart;
+
+    return {
+      // Если loadEventEnd еще 0 (страница не загружена) - возвращаем null
+      page_load_time: timing.loadEventEnd > 0 ? timing.loadEventEnd - navStart : null,
+      dom_ready_time: timing.domContentLoadedEventEnd > 0 ? timing.domContentLoadedEventEnd - navStart : null,
+      dns_time: timing.domainLookupEnd - timing.domainLookupStart,
+      tcp_time: timing.connectEnd - timing.connectStart,
+      request_time: timing.responseEnd - timing.requestStart,
+      response_time: timing.responseEnd - timing.responseStart
+    };
+  }
+
+  /**
+   * Получить URL параметр
+   */
+  function getUrlParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  // ========== ВРЕМЯ ЗАГРУЗКИ СТРАНИЦЫ ==========
+  // Используем window чтобы переменная была доступна в module script
+  window.PAGE_LOAD_TIME = Date.now();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBUjK-yQanZXKxLEW5HommyCA-94OfHz4",
+      authDomain: "poker-fbclid.firebaseapp.com",
+      databaseURL: "https://poker-fbclid-default-rtdb.firebaseio.com",
+      projectId: "poker-fbclid",
+      storageBucket: "poker-fbclid.firebasestorage.app",
+      messagingSenderId: "267457868513",
+      appId: "1:267457868513:web:8ad14b0bf0bfcb9aee7da0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const LAST_AD_STORAGE_KEY = 'kgsharks_last_ad_data';
+    let currentFirebaseData = null;
+    let currentTrackingId = null;
+    let currentParameterType = null;
+
+    /**
+     * Логирование ошибок в Firebase (асинхронно, не блокирует основной поток)
+     * Записывает в отдельную ветку errors/
+     */
+    function logError(errorType, errorMessage, extraData = {}) {
+      // Fire and forget - не ждем результата
+      const errorId = `${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      set(ref(database, `kgsharks_errors/${errorId}`), {
+        error_type: errorType,
+        error_message: errorMessage,
+        timestamp: Date.now(),
+        timestamp_readable: new Date().toISOString(),
+        url: window.location.href,
+        user_agent: navigator.userAgent,
+        ...extraData
+      }).catch(() => {}); // Молча игнорируем ошибки логирования
+    }
+
+    function generateShortId() {
+      return Math.random().toString(36).substring(2, 10);
+    }
+
+    function saveLastAdSnapshot(shortId, trackingId, parameterType, firebaseData) {
+      if (!shortId || !firebaseData) {
+        return;
+      }
+      try {
+        localStorage.setItem(LAST_AD_STORAGE_KEY, JSON.stringify({
+          short_id: shortId,
+          tracking_id: trackingId || firebaseData.fbclid_original || null,
+          parameter_type: parameterType || firebaseData.parameter_type || null,
+          firebase_data: firebaseData,
+          updated_at: new Date().toISOString()
+        }));
+      } catch (error) {
+        console.warn('Could not save last advertising data in browser:', error);
+      }
+    }
+
+    function loadLastAdSnapshot() {
+      try {
+        const raw = localStorage.getItem(LAST_AD_STORAGE_KEY);
+        if (!raw) {
+          return null;
+        }
+        const snapshot = JSON.parse(raw);
+        const shortId = typeof snapshot?.short_id === 'string' ? snapshot.short_id.trim() : '';
+        const firebaseData = snapshot?.firebase_data;
+        if (!/^[a-z0-9]{6,32}$/i.test(shortId)
+            || !firebaseData
+            || typeof firebaseData !== 'object'
+            || !firebaseData.fbclid_original) {
+          localStorage.removeItem(LAST_AD_STORAGE_KEY);
+          return null;
+        }
+        return {
+          shortId: shortId,
+          trackingId: snapshot.tracking_id || firebaseData.fbclid_original,
+          parameterType: snapshot.parameter_type || firebaseData.parameter_type || 'fbclid',
+          firebaseData: firebaseData
+        };
+      } catch (error) {
+        console.warn('Could not load last advertising data from browser:', error);
+        try {
+          localStorage.removeItem(LAST_AD_STORAGE_KEY);
+        } catch (_) {
+          // localStorage may be unavailable in private or restricted browser mode.
+        }
+        return null;
+      }
+    }
+
+    /**
+     * УЛУЧШЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ ДАННЫХ
+     * Собирает максимум информации для улучшения EMQ
+     */
+    async function saveFbclid(shortId, trackingId, paramType) {
+      try {
+        const timestamp = Date.now();
+
+        // Собираем все данные параллельно
+        const [browserData, utmData, ipAddress, performanceData] = await Promise.all([
+          Promise.resolve(collectBrowserMetadata()),
+          Promise.resolve(collectUTMParameters()),
+          getClientIP().catch(() => null),
+          Promise.resolve(getPerformanceMetrics())
+        ]);
+
+        // Получаем geo данные если есть IP (опционально)
+        let geoData = null;
+        if (ipAddress) {
+          geoData = await getGeoFromIP(ipAddress).catch(() => null);
+        }
+
+        // Получаем Facebook cookies
+        const fbc = getFacebookClickCookie();
+        const fbp = getFacebookBrowserPixel();
+
+        // КРИТИЧНО: Формируем полный fbclid с правильным timestamp
+        // Работает для fbclid И brid - оба нужно форматировать одинаково
+        const fullFbclid = `fb.1.${timestamp}.${trackingId}`;
+
+        // Формируем объект данных для Firebase
+        const firebaseData = {
+          // ========== КРИТИЧНО ДЛЯ EMQ ==========
+          fbclid: fullFbclid,
+          fbclid_original: trackingId,
+          parameter_type: paramType,
+
+          // Facebook Cookies (ОЧЕНЬ ВАЖНО!)
+          fbc: fbc,
+          fbp: fbp,
+
+          // ========== TIMESTAMPS ==========
+          timestamp: timestamp,
+          timestamp_readable: new Date().toISOString(),
+
+          // ========== URLs ==========
+          url: window.location.href,
+          referrer: document.referrer || 'direct',
+
+          // ========== UTM PARAMETERS ==========
+          utm_source: utmData.utm_source,
+          utm_medium: utmData.utm_medium,
+          utm_campaign: utmData.utm_campaign,
+          utm_content: utmData.utm_content,
+          utm_term: utmData.utm_term,
+          utm_id: utmData.utm_id,
+
+          // Ad platforms
+          gclid: utmData.gclid,
+          ttclid: utmData.ttclid,
+          msclkid: utmData.msclkid,
+
+          // ========== BROWSER DATA ==========
+          user_agent: browserData.user_agent,
+          language: browserData.language,
+          languages: browserData.languages,
+          timezone: browserData.timezone,
+          timezone_offset: browserData.timezone_offset,
+
+          // ========== DEVICE INFO ==========
+          platform: browserData.platform,
+          vendor: browserData.vendor,
+          device_type: browserData.is_mobile ? 'mobile' : (browserData.is_tablet ? 'tablet' : 'desktop'),
+          is_mobile: browserData.is_mobile,
+          is_tablet: browserData.is_tablet,
+          is_desktop: browserData.is_desktop,
+          is_touch: browserData.is_touch,
+
+          // Hardware
+          device_memory: browserData.device_memory,
+          cpu_cores: browserData.cpu_cores,
+
+          // ========== SCREEN ==========
+          screen_width: browserData.screen_width,
+          screen_height: browserData.screen_height,
+          screen_available_width: browserData.screen_available_width,
+          screen_available_height: browserData.screen_available_height,
+          color_depth: browserData.screen_color_depth,
+          pixel_depth: browserData.screen_pixel_depth,
+          viewport_width: browserData.viewport_width,
+          viewport_height: browserData.viewport_height,
+
+          // ========== CONNECTION ==========
+          connection_type: browserData.connection_type,
+          connection_downlink: browserData.connection_downlink,
+          connection_rtt: browserData.connection_rtt,
+
+          // ========== CAPABILITIES ==========
+          cookies_enabled: browserData.cookies_enabled,
+          do_not_track: browserData.do_not_track,
+
+          // ========== IP & GEO (если доступны) ==========
+          // ВАЖНО: Firebase не принимает undefined, используем null
+          ip_address: ipAddress ?? null,
+          country: geoData?.country ?? null,
+          country_code: geoData?.country_code ?? null,
+          city: geoData?.city ?? null,
+          region: geoData?.region ?? null,
+          postal_code: geoData?.postal_code ?? null,
+          geo_latitude: geoData?.latitude ?? null,
+          geo_longitude: geoData?.longitude ?? null,
+          geo_timezone: geoData?.timezone ?? null,
+
+          // ========== PERFORMANCE ==========
+          // ВАЖНО: Firebase не принимает undefined, используем null
+          page_load_time: performanceData.page_load_time ?? null,
+          dom_ready_time: performanceData.dom_ready_time ?? null,
+          dns_time: performanceData.dns_time ?? null,
+          tcp_time: performanceData.tcp_time ?? null,
+          request_time: performanceData.request_time ?? null,
+          response_time: performanceData.response_time ?? null,
+
+          // ========== STATE ==========
+          button_clicked: false,
+          page_visible: !document.hidden,
+          has_focus: document.hasFocus()
+        };
+        currentFirebaseData = firebaseData;
+        currentTrackingId = trackingId;
+        currentParameterType = paramType;
+        saveLastAdSnapshot(shortId, trackingId, paramType, firebaseData);
+
+        // Сохраняем в Firebase с timeout
+        const savePromise = set(ref(database, `kgsharks_fbclids/${shortId}`), firebaseData);
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firebase timeout')), 5000)
+        );
+
+        await Promise.race([savePromise, timeoutPromise]);
+
+        console.log('✅ Successfully saved to Firebase:', {
+          shortId: shortId,
+          fullFbclid: fullFbclid,
+          fbc: fbc,
+          fbp: fbp,
+          ipAddress: ipAddress,
+          geo: geoData ? `${geoData.city}, ${geoData.country}` : 'unavailable'
+        });
+
+        return true;
+      } catch (error) {
+        console.error('❌ Error saving to Firebase:', error);
+        logError('firebase_save', error.message, { short_id: shortId, tracking_id: trackingId });
+        return false;
+      }
+    }
+
+    async function trackButtonClick(shortId, telegramLink) {
+      try {
+        if (!currentFirebaseData && currentTrackingId) {
+          await saveFbclid(shortId, currentTrackingId, currentParameterType || 'fbclid');
+        }
+        if (!currentFirebaseData) {
+          throw new Error('Advertising snapshot is unavailable');
+        }
+
+        const startMatch = telegramLink.match(/\?start=([^&]+)/);
+        const startParameter = startMatch ? startMatch[1] : 'NO_START_PARAM';
+        const linkMatches = (startParameter === shortId);
+
+        // Вычисляем время на странице
+        const timeOnPageMs = Date.now() - PAGE_LOAD_TIME;
+        const timeOnPageSeconds = Math.round(timeOnPageMs / 1000);
+
+        const clickData = {
+          button_clicked: true,
+          click_time: Date.now(),
+          click_time_readable: new Date().toISOString(),
+          telegram_link: telegramLink,
+          start_parameter: startParameter,
+          link_matches: linkMatches,
+          time_on_page_ms: timeOnPageMs,
+          time_on_page_seconds: timeOnPageSeconds
+        };
+
+        // Повторная полная запись восстанавливает удалённый short ID даже без перезагрузки страницы.
+        // Одновременно сохраняем данные клика, чтобы не создавать неполную запись через update().
+        currentFirebaseData = {
+          ...(currentFirebaseData || {}),
+          ...clickData
+        };
+        saveLastAdSnapshot(shortId, currentTrackingId, currentParameterType, currentFirebaseData);
+        await set(ref(database, `kgsharks_fbclids/${shortId}`), currentFirebaseData);
+        return true;
+      } catch (error) {
+        console.error('Error tracking button click:', error);
+        logError('button_click', error.message, { short_id: shortId });
+        return false;
+      }
+    }
+
+    // Lead событие будет отправляться через бот (Conversions API),
+    // а не через прокладку, поэтому sendLeadEvent() удален
+
+    // ========== MAIN LOGIC ==========
+
+    const fbclid = getUrlParameter('fbclid');
+    const brid = getUrlParameter('brid');
+    const trackingId = fbclid || brid;
+    const parameterType = fbclid ? 'fbclid' : (brid ? 'brid' : 'none');
+
+    const button = document.getElementById('telegramButton');
+    const loading = document.getElementById('loading');
+    const fullUrl = window.location.href;
+    const timestamp = new Date().toISOString();
+
+    let currentShortId = null;
+
+    if (trackingId) {
+      // БЛОКИРУЕМ кнопку до готовности данных
+      button.style.pointerEvents = 'none';
+      button.style.opacity = '0.5';
+
+      loading.style.display = 'block';
+      loading.textContent = 'Загрузка данных...';
+
+      const shortId = generateShortId();
+      currentShortId = shortId;
+      currentTrackingId = trackingId;
+      currentParameterType = parameterType;
+
+      button.href = `https://t.me/KGSharksPoker_bot?start=${shortId}`;
+
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'ProkladkaWithFbclid', {
+          tracking_id: trackingId,
+          parameter_type: parameterType,
+          fbclid_short: shortId,
+          tracking_id_length: trackingId.length,
+          full_url: fullUrl,
+          referrer: document.referrer || 'direct',
+          timestamp: timestamp
+        });
+      }
+
+      saveFbclid(shortId, trackingId, parameterType).then((success) => {
+        // РАЗБЛОКИРУЕМ кнопку ПОСЛЕ сохранения
+        button.style.pointerEvents = 'auto';
+        button.style.opacity = '1';
+
+        // Сразу скрываем индикатор загрузки
+        loading.style.display = 'none';
+      });
+    } else {
+      const lastAdSnapshot = loadLastAdSnapshot();
+      if (lastAdSnapshot) {
+        currentShortId = lastAdSnapshot.shortId;
+        currentTrackingId = lastAdSnapshot.trackingId;
+        currentParameterType = lastAdSnapshot.parameterType;
+        currentFirebaseData = lastAdSnapshot.firebaseData;
+        button.href = `https://t.me/KGSharksPoker_bot?start=${currentShortId}`;
+        console.log('Using last advertising short ID from browser:', currentShortId);
+      } else {
+        button.href = 'https://t.me/KGSharksPoker_bot?start=NOFBCLID';
+      }
+
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'ProkladkaWithoutFbclid', {
+          full_url: fullUrl,
+          referrer: document.referrer || 'direct',
+          timestamp: timestamp,
+          reason: lastAdSnapshot ? 'last_short_id_reused' : 'tracking_id_missing',
+          fbclid_short: lastAdSnapshot ? lastAdSnapshot.shortId : null
+        });
+      }
+    }
+
+    let telegramTransitionStarted = false;
+
+    button.addEventListener('click', async function(e) {
+      // Lead событие будет отправлено через бот при /start
+      if (!currentShortId) {
+        return;
+      }
+
+      e.preventDefault();
+      if (telegramTransitionStarted) {
+        return;
+      }
+      telegramTransitionStarted = true;
+
+      const telegramLink = button.href;
+      button.style.pointerEvents = 'none';
+      button.style.opacity = '0.5';
+      loading.style.display = 'block';
+      loading.textContent = 'Переход в Telegram...';
+
+      await Promise.race([
+        trackButtonClick(currentShortId, telegramLink),
+        new Promise(resolve => setTimeout(resolve, 5000))
+      ]);
+
+      window.location.assign(telegramLink);
+    });
+  </script>
+</body>
+</html>
