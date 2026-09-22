@@ -205,14 +205,15 @@ a { color: var(--hi); }
 .chip--1 { color: var(--accent); left: -2%; top: 16%; }
 .chip--2 { color: var(--hi); right: 0; top: 4%; width: 48px; height: 48px; animation-delay: -2s; }
 .chip--3 { color: var(--accent2); right: 4%; bottom: 10%; width: 56px; height: 56px; animation-delay: -4s; }
-.card-fan { position: absolute; left: 2%; bottom: 2%; width: 30%; aspect-ratio: 1; animation: float 7s ease-in-out infinite; animation-delay: -1s; }
+/* container-type — чтобы буквы и масти на картах считались от ширины самих карт */
+.card-fan { container-type: inline-size; position: absolute; left: 2%; bottom: 2%; width: 30%; aspect-ratio: 1; animation: float 7s ease-in-out infinite; animation-delay: -1s; }
 .pcard {
   position: absolute; left: 20%; bottom: 0; width: 56%; aspect-ratio: 5 / 7; border-radius: 9px;
   background: linear-gradient(160deg, #fff, #e9eef3); color: #111; box-shadow: 0 16px 30px -10px rgba(0,0,0,.6);
   transform: rotate(-14deg); transform-origin: bottom center; display: grid; place-items: center; font-family: var(--font-head);
 }
-.pcard i { position: absolute; left: 10%; top: 5%; font-style: normal; font-weight: 800; font-size: .95rem; }
-.pcard em { font-style: normal; font-size: 2rem; }
+.pcard i { position: absolute; left: 10%; top: 5%; font-style: normal; font-weight: 800; font-size: .95rem; font-size: 11cqw; }
+.pcard em { font-style: normal; font-size: 2rem; font-size: 23cqw; }
 .pcard--r { color: #d11a2a; transform: rotate(12deg) translateX(34%); }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes float { 50% { transform: translateY(-12px); } }
