@@ -220,11 +220,15 @@ a { color: var(--hi); }
 @media (max-width: 900px) {
   .hero { padding-top: 18px; }
   .hero__grid { grid-template-columns: 1fr; gap: 10px; text-align: center; }
-  .hero__art { order: -1; max-width: 118px; }
-  .chip { width: 32px; height: 32px; }
-  .chip--2 { width: 26px; height: 26px; }
-  .chip--1 { left: -8%; }
-  .card-fan { width: 26%; left: -2%; }
+  /* Фишки и карты задаются в процентах от блока с логотипом — тогда вся композиция
+     сжимается целиком, как на компьютере, и ничего не налезает на логотип */
+  .hero__art { order: -1; max-width: 150px; }
+  .chip { width: 14%; height: auto; aspect-ratio: 1; }
+  .chip--2 { width: 10.5%; height: auto; }
+  .chip--3 { width: 12%; height: auto; }
+  .card-fan { width: 26%; left: -13%; bottom: -6%; }
+  .chip--1 { left: -9%; }
+  .chip--3 { right: -2%; }
   .hero h1 { font-size: clamp(2.1rem, 10vw, 3rem); }
   /* На телефоне кнопка «Играть» — сразу под подзаголовком, преимущества ниже */
   .hero__text { display: flex; flex-direction: column; }
