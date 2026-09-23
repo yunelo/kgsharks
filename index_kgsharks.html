@@ -696,6 +696,25 @@ main section[id] { scroll-margin-top: 124px; }
 @keyframes wait { 50% { opacity: .22; } }
 @media (prefers-reduced-motion: reduce) { .game--wait { animation: none; } }
 
+/* Ближайший старт турнира */
+.tour__next { margin: 0; font-family: var(--font-head); font-weight: 800; font-size: 1.02rem; color: var(--hi); }
+.tour__next:empty { display: none; }
+.tour--main .tour__next { font-size: 1.15rem; }
+
+/* Плашка часового пояса в разделах со временем */
+.tz-chip {
+  display: inline-flex; align-items: center; gap: 7px; margin: -4px 0 14px;
+  padding: 6px 12px; border-radius: 999px; font-size: .8rem; font-weight: 700;
+  color: var(--hi); background: color-mix(in srgb, var(--hi) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hi) 28%, transparent);
+}
+.tz-chip::before {
+  content: ""; width: 14px; height: 14px; flex: none; border-radius: 50%;
+  border: 1.6px solid currentColor;
+  background: linear-gradient(currentColor, currentColor) 50% 22% / 1.6px 30% no-repeat,
+              linear-gradient(currentColor, currentColor) 62% 50% / 24% 1.6px no-repeat;
+}
+
 /* Орнамент клуба (генерирует shared/ornament.mjs) */
 .hero { isolation: isolate; }
 .hero::before {
@@ -732,7 +751,7 @@ main section[id] { scroll-margin-top: 124px; }
   fbq('init', '1897263797606299', { autoConfig: false, disablePushState: true });
   fbq('track', 'PageView');
   window.PAGE_LOAD_TIME = Date.now();
-  window.CLUB = {"id":"kgsharks","name":"KGSharks Club","shortName":"KGSharks","pixelId":"1897263797606299","bot":"KGSharksPoker_bot","langs":["ru","ky"],"defaultLang":"ru","timezone":"Asia/Bishkek","tzLabel":{"ru":"Бишкек (UTC+6)","ky":"Бишкек (UTC+6)"},"country":{"ru":"Кыргызстан","ky":"Кыргызстан"},"currency":{"ru":"сом","ky":"сом"},"chipRate":1,"games":["NLH","PLO4","PLO5","AoF"],"stakes":{"min":"4.35/8.7","max":"43.5/87"},"bonuses":{"firstDeposit":30,"cashback":25,"rakeback":40,"wagerHands":300},"schedule":{"day":"mon","maintFrom":"13:00","maintTo":"14:00","lbStart":"15:00","withdrawFrom":"09:00","withdrawTo":"21:00","lbEnd":"23:59"},"jackpot":{"name":"Cooler Jackpot","payouts":{"NLH":[3.5,6.5,9],"AoF":[2.5,4.6,6.3],"PLO4":[null,4.6,6.3],"PLO5":[null,3.3,4.5]}},"referral":{"exampleDeposit":2000,"tiers":[{"from":1,"to":2,"pct":10},{"from":3,"to":9,"pct":15},{"from":10,"to":19,"pct":20},{"from":20,"to":null,"pct":30}]},"meta":{"ru":{"title":"KGSharks Club — онлайн покер-клуб в Кыргызстане","description":"40% рейкбэк всем игрокам, +30% к первому депозиту, ежедневные турниры и еженедельный лидерборд. NLH, PLO4, PLO5, AoF в PokerShip. 18+."},"ky":{"title":"KGSharks Club — Кыргызстандагы онлайн покер-клуб","description":"Бардык оюнчуларга 40% рейкбэк, биринчи депозитке +30%, күнүмдүк турнирлер жана жумалык лидерборд. PokerShip'те NLH, PLO4, PLO5, AoF. 18+."}},"ornament":"kg","tracking":{"adBranch":"kgsharks_fbclids","errorsBranch":"kgsharks_errors","visitsBranch":"kgsharks_visits","liveBranch":"kgsharks_live","storageKey":"kgsharks_last_ad_data","noTrackingStart":"NOFBCLID","firebase":{"apiKey":"AIzaSyBBUjK-yQanZXKxLEW5HommyCA-94OfHz4","authDomain":"poker-fbclid.firebaseapp.com","databaseURL":"https://poker-fbclid-default-rtdb.firebaseio.com","projectId":"poker-fbclid","storageBucket":"poker-fbclid.firebasestorage.app","messagingSenderId":"267457868513","appId":"1:267457868513:web:8ad14b0bf0bfcb9aee7da0"}},"usdChips":87,"mskShift":3};
+  window.CLUB = {"id":"kgsharks","name":"KGSharks Club","shortName":"KGSharks","pixelId":"1897263797606299","bot":"KGSharksPoker_bot","langs":["ru","ky","en"],"defaultLang":"ru","timezone":"Asia/Bishkek","tzLabel":{"ru":"Бишкек (UTC+6)","ky":"Бишкек (UTC+6)","en":"Bishkek (UTC+6)"},"country":{"ru":"Кыргызстан","ky":"Кыргызстан","en":"Kyrgyzstan"},"currency":{"ru":"сом","ky":"сом","en":"KGS"},"chipRate":1,"games":["NLH","PLO4","PLO5","AoF"],"stakes":{"min":"4.35/8.7","max":"43.5/87"},"bonuses":{"firstDeposit":30,"cashback":25,"rakeback":40,"wagerHands":300},"schedule":{"day":"mon","maintFrom":"13:00","maintTo":"14:00","lbStart":"15:00","withdrawFrom":"09:00","withdrawTo":"21:00","lbEnd":"23:59"},"jackpot":{"name":"Cooler Jackpot","payouts":{"NLH":[3.5,6.5,9],"AoF":[2.5,4.6,6.3],"PLO4":[null,4.6,6.3],"PLO5":[null,3.3,4.5]}},"referral":{"exampleDeposit":2000,"tiers":[{"from":1,"to":2,"pct":10},{"from":3,"to":9,"pct":15},{"from":10,"to":19,"pct":20},{"from":20,"to":null,"pct":30}]},"meta":{"ru":{"title":"KGSharks Club — онлайн покер-клуб в Кыргызстане","description":"40% рейкбэк всем игрокам, +30% к первому депозиту, ежедневные турниры и еженедельный лидерборд. NLH, PLO4, PLO5, AoF в PokerShip. 18+."},"ky":{"title":"KGSharks Club — Кыргызстандагы онлайн покер-клуб","description":"Бардык оюнчуларга 40% рейкбэк, биринчи депозитке +30%, күнүмдүк турнирлер жана жумалык лидерборд. PokerShip'те NLH, PLO4, PLO5, AoF. 18+."},"en":{"title":"KGSharks Club — online poker club in Kyrgyzstan","description":"40% rakeback for every player, +30% on your first deposit, daily tournaments and a weekly leaderboard. NLH, PLO4, PLO5 and AoF in PokerShip. 18+."}},"page":"index_kgsharks.html","ornament":"kg","tracking":{"adBranch":"kgsharks_fbclids","errorsBranch":"kgsharks_errors","visitsBranch":"kgsharks_visits","liveBranch":"kgsharks_live","storageKey":"kgsharks_last_ad_data","noTrackingStart":"NOFBCLID","firebase":{"apiKey":"AIzaSyBBUjK-yQanZXKxLEW5HommyCA-94OfHz4","authDomain":"poker-fbclid.firebaseapp.com","databaseURL":"https://poker-fbclid-default-rtdb.firebaseio.com","projectId":"poker-fbclid","storageBucket":"poker-fbclid.firebasestorage.app","messagingSenderId":"267457868513","appId":"1:267457868513:web:8ad14b0bf0bfcb9aee7da0"}},"usdChips":87,"mskShift":3};
 
   // Рекламный заход: кнопки «Играть» заблокированы, пока tracker.js не сохранит запись в Firebase
   // и не подставит ссылку с shortId. Страховка: если трекер вообще не загрузился — разблокируем через 12 с.
@@ -883,6 +902,7 @@ main section[id] { scroll-margin-top: 124px; }
       <div class="wrap">
         <p class="kicker" data-i18n="k_tables"></p>
         <h2 data-i18n="sec_tables"></h2>
+        <p class="tz-chip" data-i18n="tz_note"></p>
         <p class="sub" data-i18n="tables_lead"></p>
         <div class="tstats" id="tablesStats"></div>
         <div class="ttabs" id="tablesTabs" role="group"></div>
@@ -896,6 +916,7 @@ main section[id] { scroll-margin-top: 124px; }
       <div class="wrap">
         <p class="kicker" data-i18n="k_tour"></p>
         <h2 data-i18n="sec_tournaments"></h2>
+        <p class="tz-chip" data-i18n="tz_note"></p>
         <p class="sub" data-i18n="tour_lead"></p>
         <div class="cards" id="tournamentList"></div>
       </div>
@@ -915,6 +936,7 @@ main section[id] { scroll-margin-top: 124px; }
       <div class="wrap">
         <p class="kicker" data-i18n="k_lb"></p>
         <h2 data-i18n="sec_lb"></h2>
+        <p class="tz-chip" data-i18n="tz_note"></p>
         <p class="sub" data-i18n="lb_lead"></p>
         <div class="lb-head">
           <div class="lb-total" id="lbTotalBox">
@@ -1124,7 +1146,7 @@ main section[id] { scroll-margin-top: 124px; }
       tb_jp: 'Cooler Jackpot сейчас', tb_note: 'Блайнды указаны в фишках клуба. Состав столов меняется в течение часа.',
 
       k_tour: 'Турниры', sec_tournaments: 'Турниры каждый день',
-      tour_lead: 'Призовые фонды в долларах, вход — фишками клуба. Время: {tz}.',
+      tour_lead: 'Призовые фонды в долларах, вход — фишками клуба.',
       ty_ko: 'Main · Knockout', ty_gtd: 'Гарантия', ty_free: 'Фриролл',
       t_free: 'Бесплатно', t_rebuy: 'Ребай/аддон',
       note_main: 'Призовой пул делится между призёрами (их число зависит от количества участников) + награда за каждый нокаут. Выиграли сателлит — попросите у оператора скидку 50% на бай-ин.',
@@ -1133,6 +1155,7 @@ main section[id] { scroll-margin-top: 124px; }
       note_free: 'Бесплатный вход, $10 получает победитель.',
       t_buyin: 'Бай-ин', t_gtd: 'Призовой фонд',
       today: 'Сегодня',
+      t_today_at: 'Сегодня в {time}', t_tomorrow_at: 'Завтра в {time}', t_day_at: '{day} в {time}', t_next: 'Ближайший',
       d_daily: 'Каждый день', d_weekdays: 'Пн–Пт', d_weekend: 'Сб–Вс',
       d_mon: 'Пн', d_tue: 'Вт', d_wed: 'Ср', d_thu: 'Чт', d_fri: 'Пт', d_sat: 'Сб', d_sun: 'Вс',
 
@@ -1216,6 +1239,148 @@ main section[id] { scroll-margin-top: 124px; }
       data_upd: 'Данные обновлены: {date}'
     },
 
+    en: {
+      cta_play: 'Play at {short}',
+      cta_short: 'Play',
+      hero_eyebrow: 'Poker club · {country}',
+      hero_lead: 'Play in the PokerShip app on Android, iOS and Windows.',
+      hl_rb: 'rakeback for every player',
+      hl_dep: 'on your first deposit',
+      hl_tour: 'Daily tournaments',
+      hl_lb: 'Weekly leaderboard',
+      hero_note: 'Sign-up and deposits — through the official Telegram bot',
+      hero_note_short: '18+ · Play responsibly',
+
+      k_bonus: 'Bonuses', sec_bonus: 'More chips from day one',
+      rb_t: 'Rakeback for every player',
+      rb_d: 'We return {rb}% of your rake every week — to every club player.',
+      rb_when: 'Every Monday, {mFrom}–{mTo}',
+      b1_t: 'First deposit bonus',
+      b1_d: 'A steady bonus: no timer and no shrinking percentage.',
+      b2_t: 'Cashback bonus',
+      b2_d: 'For players who meet the bot conditions. You pick it when you deposit.',
+      b3_t: 'For invited friends',
+      b3_d: 'Chips on your referral balance from every friend first deposit.',
+      more: 'Details →',
+      terms: [
+        'You choose the bonus yourself when making a deposit.',
+        '+{dep}% on the first deposit — steady: no timer and no shrinking percentage.',
+        'Cashback +{cb}% — for players who meet the bot conditions.',
+        'The bonus promo code is applied when the deposit is created.',
+        'Standard bonus wagering — {wager} hands.',
+        'Expired bonuses, or bonuses used against the rules, may be cancelled by the administration.'
+      ],
+
+      k_games: 'Games', sec_games: 'NLH, PLO4, PLO5 and AoF', and_word: 'and',
+      games_lead: 'Every format — in one PokerShip app.',
+      g_NLH: 'No-limit Hold’em — the poker classic.',
+      g_PLO4: 'Omaha with 4 cards — more action and bigger pots.',
+      g_PLO5: 'Omaha with 5 cards — for action lovers.',
+      g_AoF: 'All-in or Fold — a fast format: shove or pass.',
+      g_new: 'A new club format — tables are already open in the PokerShip app.',
+      platforms: 'Available on', nav_label: 'Site sections',
+
+      k_tables: 'Tables', sec_tables: 'Playing right now',
+      tables_lead: 'Live club tables. The list is updated every hour — pick your stakes and take a seat.',
+      tb_players: 'players at the tables', tb_open: 'tables open', tb_upd: 'updated at {time}',
+      tb_blinds: 'Blinds', tb_seats: 'Seats', tb_free: 'Seats free: {n}', tb_full: 'Table is full',
+      tb_empty: 'Table is empty — be the first', tb_sit: 'Take a seat', tb_all: 'All',
+      tb_jp: 'Cooler Jackpot now', tb_note: 'Blinds are shown in club chips. The table list changes during the hour.',
+
+      k_tour: 'Tournaments', sec_tournaments: 'Tournaments every day',
+      tour_lead: 'Prize pools in dollars, buy-ins in club chips.',
+      ty_ko: 'Main · Knockout', ty_gtd: 'Guaranteed', ty_free: 'Freeroll',
+      t_free: 'Free', t_rebuy: 'Rebuy/add-on',
+      note_main: 'The prize pool is split between the winners (their number depends on the field) + a reward for every knockout. Won a satellite — ask the operator for a 50% buy-in discount.',
+      note_gtd500: '$500 shared by all winners + a 50% discount on the Main buy-in.',
+      note_mini: 'The prize pool is split between the winners.',
+      note_free: 'Free entry, the winner takes $10.',
+      t_buyin: 'Buy-in', t_gtd: 'Prize pool',
+      today: 'Today',
+      t_today_at: 'Today at {time}', t_tomorrow_at: 'Tomorrow at {time}', t_day_at: '{day} at {time}', t_next: 'Next up',
+      d_daily: 'Every day', d_weekdays: 'Mon–Fri', d_weekend: 'Sat–Sun',
+      d_mon: 'Mon', d_tue: 'Tue', d_wed: 'Wed', d_thu: 'Thu', d_fri: 'Fri', d_sat: 'Sat', d_sun: 'Sun',
+
+      k_week: 'Week at the club', sec_week: 'Monday is update day',
+      tl_day: 'Monday',
+      day_sun: 'Sunday', day_mon: 'next Monday', day_sun_gen: 'Sunday', day_mon_gen: 'next Monday',
+      tl1_t: 'Maintenance', tl1_d: 'Tables are refreshed, {rb}% rakeback is paid out and the leaderboard is settled.',
+      tl2_t: 'Tables are open again', tl2_d: 'Play continues as usual.',
+      tl3_t: 'New leaderboard starts', tl3_d: 'A new stage: points are counted from zero until {lbEndGen} {lbEnd}.',
+      tz_note: 'Time: {tz}',
+      maint_now: 'Maintenance is running right now: table refresh, rakeback and the leaderboard. Tables reopen at {mTo}.',
+
+      k_lb: 'Competition', sec_lb: 'Leaderboard of the week',
+      lb_lead: 'Points are earned on every cash-game hand (except OFC/PUSOY) based on VPIP, activity and blind size. The table in the app refreshes every 5 minutes.',
+      lb_period: 'Stage: {from} — {to}',
+      lb_total: 'Total rewards',
+      lb_group: 'Stakes {stakes}',
+      lb_place: 'Place',
+      lb_prizes_app: 'See the prizes for this group in the app.',
+      lb_more: 'Further places — in the table inside the app.',
+      lb_note: 'Stage: Monday {lbStart} — {lbEndDay} {lbEnd}. Results and rewards — on Monday, {mFrom}–{mTo}.',
+      k_jp: 'Jackpot',
+      jp_fund: 'Jackpot pool',
+      jp_upd: 'updated {date}',
+      jp_lead: 'When a full house loses to quads or a better hand, that is a cooler. The jackpot goes to everyone dealt into the hand, even players who folded.',
+      jp_loser: 'loser', jp_winner: 'winner', jp_others: 'other players',
+      jp_two: 'If only two players are in the hand: the loser gets 60%, the winner 40%.',
+      jp_table_t: 'Share of the pool by the losing hand',
+      jp_c1: 'Full house (JJ+) beaten', jp_c2: 'Quads beaten', jp_c3: 'Straight flush beaten',
+      jp_table_note: 'The payout also depends on the table stakes.',
+      jp_rules: [
+        'Both hole cards must play.',
+        'For a full house — a pocket pair of jacks or better as the trips plus a pair on the board; for quads — a pocket pair.',
+        'Works only at tables with the jackpot mark.',
+        'Anyone who leaves the table before the hand ends does not take part in the jackpot.'
+      ],
+      stakes: 'Stakes: from {stMin} to {stMax} · {rateText}',
+      rate: '1 chip = {rate} {cur}',
+      chips_one: 'chip', chips_few: 'chips', chips_many: 'chips',
+
+      k_ref: 'For friends', sec_ref: 'Referral programme',
+      ref_lead: 'Every invited player first confirmed deposit adds chips to your referral balance. The percentage depends on how many friends you invite.',
+      unit_few: 'friends', unit_many: 'friends',
+      calc_title: 'Calculate your reward',
+      calc_friends: 'Friends invited',
+      calc_dep: 'Average first deposit of a friend, {cur}',
+      calc_res: 'Chips on the referral balance:',
+      calc_tier: 'tier {pct}%',
+      calc_note: 'An estimate: the percentage depends on the number of invited friends.',
+      r1: 'Get your personal link in the bot.',
+      r2: 'Your friend signs up and makes a first deposit.',
+      r3: 'Once the deposit is confirmed, chips land on your referral balance.',
+      r4: 'Send a request through the bot — the chips move to your club account.',
+      ref_cta: 'Get a referral link',
+
+      k_steps: 'Start', sec_steps: 'How to start in 3 steps',
+      s1: 'Open the official bot', s1d: 'The button leads to @{bot} — sign-up and cashier are there.',
+      s2: 'Install PokerShip', s2d: 'Android, iOS or Windows. The bot will show you how to join the club.',
+      s3: 'Deposit and pick a bonus', s3d: '+{dep}% on the first deposit or +{cb}% cashback if you meet the conditions.',
+
+      sf1: 'Withdrawals {wdFrom}–{wdTo}', sf1d: 'Withdrawal requests are processed daily during these hours.',
+      sf2: 'One account per player', sf2d: 'Multiple accounts are against the club rules.',
+      sf3: 'Keep your data safe', sf3d: 'The administration never asks for passwords, SMS codes or card details outside the official bot @{bot}.',
+
+      k_faq: 'FAQ', sec_faq: 'Questions and answers',
+      faq: [
+        ['Where is the game played?', 'In the PokerShip app — on Android, iOS and Windows. The bot will show you how to install the app and join the club.'],
+        ['How do I deposit and withdraw?', 'Through the official Telegram bot. Withdrawals are processed daily from {wdFrom} to {wdTo}.'],
+        ['How do I get a deposit bonus?', 'You pick the bonus when depositing: +{dep}% on the first deposit or +{cb}% cashback if you meet the bot conditions. The promo code is entered when creating the deposit. Wagering — {wager} hands.'],
+        ['When is rakeback paid?', 'Every Monday during maintenance from {mFrom} to {mTo} — {rb}% of your rake for the past week.'],
+        ['How does the leaderboard work?', 'Points are earned on every cash-game hand from Monday {lbStart} until {lbEndGen} {lbEnd}. There are two standings, by stake group. Results are settled on Monday, {mFrom}–{mTo}, and rewards are paid in chips.'],
+        ['How do I claim referral chips?', 'The reward builds up on your referral balance: {tiersText}. To move the chips into the club, send a request through the bot.'],
+        ['How much is one chip?', 'At {name}: {rateText}.']
+      ],
+
+      final_title: 'Take your seat',
+      final_lead: 'Signing up takes a couple of minutes — everything goes through the official bot.',
+      group: 'Club group on Telegram →',
+      footer_rg: 'Poker is played for money and carries risk. Only play with money you are ready to lose.',
+      going: 'Opening Telegram…',
+      data_upd: 'Data updated: {date}'
+    },
+
     ky: {
       cta_play: '{short} клубунда ойноо',
       cta_short: 'Ойноо',
@@ -1265,7 +1430,7 @@ main section[id] { scroll-margin-top: 124px; }
       tb_jp: 'Cooler Jackpot азыр', tb_note: 'Блайнддар клубдун фишкаларында көрсөтүлгөн. Үстөлдөр саат ичинде өзгөрүп турат.',
 
       k_tour: 'Турнирлер', sec_tournaments: 'Күн сайын турнирлер',
-      tour_lead: 'Байге фонддору долларда, кирүү — клубдун фишкалары менен. Убакыт: {tz}.',
+      tour_lead: 'Байге фонддору долларда, кирүү — клубдун фишкалары менен.',
       ty_ko: 'Main · Knockout', ty_gtd: 'Кепилдик', ty_free: 'Фриролл',
       t_free: 'Акысыз', t_rebuy: 'Ребай/аддон',
       note_main: 'Байге фонду байге алуучулар арасында бөлүштүрүлөт (алардын саны катышуучуларга жараша) + ар бир нокаут үчүн сыйлык. Сателлитти уттуңузбу — оператордон бай-инге 50% арзандатуу сураңыз.',
@@ -1274,6 +1439,7 @@ main section[id] { scroll-margin-top: 124px; }
       note_free: 'Акысыз кирүү, $10 жеңүүчүгө.',
       t_buyin: 'Бай-ин', t_gtd: 'Байге фонду',
       today: 'Бүгүн',
+      t_today_at: 'Бүгүн саат {time}', t_tomorrow_at: 'Эртең саат {time}', t_day_at: '{day} саат {time}', t_next: 'Жакынкы',
       d_daily: 'Күн сайын', d_weekdays: 'Дш–Жм', d_weekend: 'Иш–Жк',
       d_mon: 'Дш', d_tue: 'Шш', d_wed: 'Шр', d_thu: 'Бш', d_fri: 'Жм', d_sat: 'Иш', d_sun: 'Жк',
 
@@ -1406,7 +1572,7 @@ main section[id] { scroll-margin-top: 124px; }
       tb_jp: 'Cooler Jackpot hozir', tb_note: 'Blaynlar klub fishkalarida ko‘rsatilgan. Stollar tarkibi soat davomida o‘zgaradi.',
 
       k_tour: 'Turnirlar', sec_tournaments: 'Har kuni turnirlar',
-      tour_lead: 'Sovrin jamg‘armalari dollarda, kirish — klub fishkalarida. Vaqt: {tz}.',
+      tour_lead: 'Sovrin jamg‘armalari dollarda, kirish — klub fishkalarida.',
       ty_ko: 'Main · Knockout', ty_gtd: 'Kafolat', ty_free: 'Frirol',
       t_free: 'Bepul', t_rebuy: 'Rebay/addon',
       note_main: 'Sovrin jamg‘armasi sovrindorlar o‘rtasida taqsimlanadi (soni ishtirokchilarga bog‘liq) + har bir nokaut uchun mukofot. Satellitni yutdingizmi — operatordan bay-inga 50% chegirma so‘rang.',
@@ -1415,6 +1581,7 @@ main section[id] { scroll-margin-top: 124px; }
       note_free: 'Bepul kirish, $10 g‘olibga.',
       t_buyin: 'Bay-in', t_gtd: 'Sovrin jamg‘armasi',
       today: 'Bugun',
+      t_today_at: 'Bugun soat {time}', t_tomorrow_at: 'Ertaga soat {time}', t_day_at: '{day} soat {time}', t_next: 'Eng yaqin',
       d_daily: 'Har kuni', d_weekdays: 'Du–Ju', d_weekend: 'Sha–Ya',
       d_mon: 'Du', d_tue: 'Se', d_wed: 'Chor', d_thu: 'Pay', d_fri: 'Ju', d_sat: 'Sha', d_sun: 'Ya',
 
@@ -1499,8 +1666,8 @@ main section[id] { scroll-margin-top: 124px; }
     }
   };
 
-  var LOCALE = { ru: 'ru-RU', ky: 'ky-KG', uz: 'uz-Latn-UZ' };
-  var LANG_LABEL = { ru: 'RU', ky: 'KG', uz: 'UZ' };
+  var LOCALE = { ru: 'ru-RU', ky: 'ky-KG', uz: 'uz-Latn-UZ', en: 'en-US' };
+  var LANG_LABEL = { ru: 'RU', ky: 'KG', uz: 'UZ', en: 'EN' };
   var SUIT = { NLH: '♠', PLO4: '♦', PLO5: '♣', AoF: '♥' };
   var RED_SUIT = { '♦': 1, '♥': 1 }; // черви и бубны — красные, пики и трефы — в цвете клуба
   var M = C.schedule; // понедельник: техработы, рейкбэк, лидерборд; выводы
@@ -1706,13 +1873,49 @@ main section[id] { scroll-margin-top: 124px; }
       var p = t.split(':'), h = (+p[0] + C.mskShift + 24) % 24;
       return (h < 10 ? '0' : '') + h + ':' + p[1];
     }
-    $('tournamentList').innerHTML = (D.tournaments || []).map(function (t) {
+    // Ближайший старт: считаем по расписанию и местному времени клуба
+    var DOW = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    function nextStart(t) {
+      var now = clubNow();
+      var days = [].concat.apply([], (Array.isArray(t.days) ? t.days : [t.days]).map(expandDays));
+      var runs = function (d) {
+        return days.some(function (x) {
+          if (x === 'daily') return true;
+          if (x === 'weekdays') return ['mon', 'tue', 'wed', 'thu', 'fri'].indexOf(d) !== -1;
+          if (x === 'weekend') return d === 'sat' || d === 'sun';
+          return x === d;
+        });
+      };
+      var from = DOW.indexOf(now.dow), best = null;
+      for (var off = 0; off <= 7; off++) {
+        var d = DOW[(from + off) % 7];
+        if (!runs(d)) continue;
+        (t.timesMsk || []).forEach(function (msk) {
+          var time = localTime(msk), delta = off * 1440 + toMin(time) - now.min;
+          if (delta >= 0 && (!best || delta < best.delta)) best = { delta: delta, time: time, off: off, dow: d };
+        });
+      }
+      return best;
+    }
+    function nextText(n) {
+      if (!n) return '';
+      if (n.off === 0) return tr('t_today_at').replace('{time}', n.time);
+      if (n.off === 1) return tr('t_tomorrow_at').replace('{time}', n.time);
+      return tr('t_day_at').replace('{day}', tr('d_' + n.dow)).replace('{time}', n.time);
+    }
+    var list = D.tournaments || [];
+    var nexts = list.map(nextStart);
+    var soonest = nexts.reduce(function (a, b) { return !b ? a : (!a || b.delta < a.delta) ? b : a; }, null);
+
+    $('tournamentList').innerHTML = list.map(function (t, i) {
       var times = (t.timesMsk || []).map(localTime).join(' · ');
+      var next = nexts[i];
       // Главный турнир недели (Knockout) — широкой карточкой
       return '<article class="card tour tour--' + esc(t.type) + (t.type === 'ko' ? ' tour--main' : '') + '">' +
         '<div class="tour__top"><span class="tour__type">' + esc(tr('ty_' + t.type)) + '</span>' +
-          (isToday(t.days) ? '<span class="tag">' + esc(tr('today')) + '</span>' : '') + '</div>' +
+          (next && soonest && next.delta === soonest.delta ? '<span class="tag">' + esc(tr('t_next')) + '</span>' : '') + '</div>' +
         '<h3>' + esc(t.name) + '</h3>' +
+        '<p class="tour__next">' + esc(nextText(next)) + '</p>' +
         '<p class="tour__when">' + esc(dayLabel(t.days)) + ' · <b>' + esc(times) + '</b></p>' +
         '<dl>' +
           '<div><dt>' + esc(tr('t_gtd')) + '</dt><dd class="accent">' + usd(t.gtd) + '<small>' + usdChips(t.gtd) + '</small></dd></div>' +
