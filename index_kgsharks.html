@@ -1890,25 +1890,30 @@ main section[id] { scroll-margin-top: 124px; }
       for (var off = 0; off <= 7; off++) {
         var d = DOW[(from + off) % 7];
         if (!runs(d)) continue;
-        (t.timesMsk || []).forEach(function (msk) {
+        (t.timesMsk || []).forEach(function (msk, k) {
           var time = localTime(msk), delta = off * 1440 + toMin(time) - now.min;
-          if (delta >= 0 && (!best || delta < best.delta)) best = { delta: delta, time: time, off: off, dow: d };
+          // labels — названия стартов по порядку времени (Water, Earth, Fire, Air)
+          if (delta >= 0 && (!best || delta < best.delta)) best = { delta: delta, time: time, off: off, dow: d, label: (t.labels || [])[k] || '' };
         });
       }
       return best;
     }
     function nextText(n) {
       if (!n) return '';
-      if (n.off === 0) return tr('t_today_at').replace('{time}', n.time);
-      if (n.off === 1) return tr('t_tomorrow_at').replace('{time}', n.time);
-      return tr('t_day_at').replace('{day}', tr('d_' + n.dow)).replace('{time}', n.time);
+      var when = n.off === 0 ? tr('t_today_at').replace('{time}', n.time)
+        : n.off === 1 ? tr('t_tomorrow_at').replace('{time}', n.time)
+        : tr('t_day_at').replace('{day}', tr('d_' + n.dow)).replace('{time}', n.time);
+      return n.label ? when + ' · ' + n.label : when;
     }
     var list = D.tournaments || [];
     var nexts = list.map(nextStart);
     var soonest = nexts.reduce(function (a, b) { return !b ? a : (!a || b.delta < a.delta) ? b : a; }, null);
 
     $('tournamentList').innerHTML = list.map(function (t, i) {
-      var times = (t.timesMsk || []).map(localTime).join(' · ');
+      var times = (t.timesMsk || []).map(function (msk, k) {
+        var label = (t.labels || [])[k];
+        return (label ? label + ' ' : '') + localTime(msk);
+      }).join(' · ');
       var next = nexts[i];
       // Главный турнир недели (Knockout) — широкой карточкой
       return '<article class="card tour tour--' + esc(t.type) + (t.type === 'ko' ? ' tour--main' : '') + '">' +

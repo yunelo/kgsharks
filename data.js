@@ -8,11 +8,14 @@ window.CLUB_DATA = {
 
   // Турниры (общие для клубов). Суммы — в долларах, время — ПО МОСКВЕ (сайт сам переведёт в местное).
   // Дни: "sat", "sun-thu" (диапазон), список ["fri","sat"]. type: "ko" | "gtd" | "free".
+  // labels (необязательно) — названия стартов по порядку timesMsk: Water 12:00, Earth 14:00 и т. д.
   tournaments: [
     { name: "MAIN MTT GTD $1000", type: "ko", days: "sat", timesMsk: ["18:00"], gtd: 1000, buyin: 10, note: "main" },
-    { name: "GTD $500 · 50% Main OFF", type: "gtd", days: "sun-fri", timesMsk: ["16:00", "18:00", "20:00"], gtd: 500, buyin: 5, rebuy: 7, note: "gtd500" },
-    { name: "Mini Daily MTT GTD $40", type: "gtd", days: "sun-thu", timesMsk: ["16:00", "20:00"], gtd: 40, buyin: 2, note: "mini" },
-    { name: "FREE $10 GTD", type: "free", days: "fri-sat", timesMsk: ["12:00", "14:00", "16:00", "20:00"], gtd: 10, buyin: 0, note: "free" }
+    { name: "GTD $500 · 50% Main OFF", type: "gtd", days: "sun-fri", timesMsk: ["18:00"], gtd: 500, buyin: 5, rebuy: 7, note: "gtd500" },
+    { name: "Midday MTT $40 GTD", type: "gtd", days: "sun-thu", timesMsk: ["16:00"], gtd: 40, buyin: 2, note: "mini" },
+    { name: "Evening MTT $40 GTD", type: "gtd", days: "sun-thu", timesMsk: ["20:00"], gtd: 40, buyin: 2, note: "mini" },
+    { name: "FREE $10 GTD", type: "free", days: "fri-sat", timesMsk: ["12:00", "14:00", "16:00", "20:00"],
+      labels: ["Water", "Earth", "Fire", "Air"], gtd: 10, buyin: 0, note: "free" }
   ],
 
   // Фонд Cooler Jackpot и столы сайт берёт сам из Firebase (kgsharks_live/data) — здесь их указывать не нужно.
