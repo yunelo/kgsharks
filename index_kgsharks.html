@@ -721,7 +721,6 @@ main section[id] { scroll-margin-top: 124px; }
   font-family: var(--font-body); font-size: .74rem; font-weight: 700; color: var(--muted);
   background: color-mix(in srgb, var(--hi) 9%, transparent); border: 1px solid var(--line);
 }
-.t-time.is-past { opacity: .4; text-decoration: line-through; text-decoration-thickness: 1px; }
 .t-time.is-next { color: var(--hi); }
 
 /* Орнамент клуба (генерирует shared/ornament.mjs) */
@@ -1927,32 +1926,18 @@ main section[id] { scroll-margin-top: 124px; }
       if (!m) return tr('t_in_h').replace('{h}', h);
       return tr('t_in_hm').replace('{h}', h).replace('{m}', m);
     }
-    // Идёт ли турнир сегодня (для подсветки прошедших стартов)
-    function runsToday(t) {
-      var today = clubNow().dow;
-      var days = [].concat.apply([], (Array.isArray(t.days) ? t.days : [t.days]).map(expandDays));
-      return days.some(function (x) {
-        if (x === 'daily') return true;
-        if (x === 'weekdays') return ['mon', 'tue', 'wed', 'thu', 'fri'].indexOf(today) !== -1;
-        if (x === 'weekend') return today === 'sat' || today === 'sun';
-        return x === today;
-      });
-    }
     var list = D.tournaments || [];
     var nexts = list.map(nextStart);
     var soonest = nexts.reduce(function (a, b) { return !b ? a : (!a || b.delta < a.delta) ? b : a; }, null);
 
     $('tournamentList').innerHTML = list.map(function (t, i) {
       var next = nexts[i];
-      // Расписание: прошедшие сегодня старты гасим, ближайший подсвечиваем
-      var nowMin = clubNow().min;
+      // Расписание: подсвечен только ближайший сегодняшний старт
       var times = (t.timesMsk || []).map(function (msk, k) {
         var label = (t.labels || [])[k];
         var time = localTime(msk);
         var isNext = next && next.off === 0 && next.time === time;
-        var isPast = runsToday(t) && toMin(time) < nowMin && !isNext;
-        return '<span class="t-time' + (isPast ? ' is-past' : '') + (isNext ? ' is-next' : '') + '">' +
-          esc((label ? label + ' ' : '') + time) + '</span>';
+        return '<span class="t-time' + (isNext ? ' is-next' : '') + '">' + esc((label ? label + ' ' : '') + time) + '</span>';
       }).join(' · ');
       // Главный турнир недели (Knockout) — широкой карточкой
       return '<article class="card tour tour--' + esc(t.type) + (t.type === 'ko' ? ' tour--main' : '') + '">' +
