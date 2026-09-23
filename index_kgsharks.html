@@ -715,6 +715,15 @@ main section[id] { scroll-margin-top: 124px; }
               linear-gradient(currentColor, currentColor) 62% 50% / 24% 1.6px no-repeat;
 }
 
+/* Обратный отсчёт и прошедшие сегодня старты */
+.tour__in {
+  display: inline-block; margin-left: 8px; padding: 3px 9px; border-radius: 999px; vertical-align: middle;
+  font-family: var(--font-body); font-size: .74rem; font-weight: 700; color: var(--muted);
+  background: color-mix(in srgb, var(--hi) 9%, transparent); border: 1px solid var(--line);
+}
+.t-time.is-past { opacity: .4; text-decoration: line-through; text-decoration-thickness: 1px; }
+.t-time.is-next { color: var(--hi); }
+
 /* Орнамент клуба (генерирует shared/ornament.mjs) */
 .hero { isolation: isolate; }
 .hero::before {
@@ -1156,6 +1165,7 @@ main section[id] { scroll-margin-top: 124px; }
       t_buyin: 'Бай-ин', t_gtd: 'Призовой фонд',
       today: 'Сегодня',
       t_today_at: 'Сегодня в {time}', t_tomorrow_at: 'Завтра в {time}', t_day_at: '{day} в {time}', t_next: 'Ближайший',
+      t_in_hm: 'через {h} ч {m} мин', t_in_h: 'через {h} ч', t_in_m: 'через {m} мин', t_soon: 'вот-вот начнётся',
       d_daily: 'Каждый день', d_weekdays: 'Пн–Пт', d_weekend: 'Сб–Вс',
       d_mon: 'Пн', d_tue: 'Вт', d_wed: 'Ср', d_thu: 'Чт', d_fri: 'Пт', d_sat: 'Сб', d_sun: 'Вс',
 
@@ -1298,6 +1308,7 @@ main section[id] { scroll-margin-top: 124px; }
       t_buyin: 'Buy-in', t_gtd: 'Prize pool',
       today: 'Today',
       t_today_at: 'Today at {time}', t_tomorrow_at: 'Tomorrow at {time}', t_day_at: '{day} at {time}', t_next: 'Next up',
+      t_in_hm: 'in {h} h {m} min', t_in_h: 'in {h} h', t_in_m: 'in {m} min', t_soon: 'starting any moment',
       d_daily: 'Every day', d_weekdays: 'Mon–Fri', d_weekend: 'Sat–Sun',
       d_mon: 'Mon', d_tue: 'Tue', d_wed: 'Wed', d_thu: 'Thu', d_fri: 'Fri', d_sat: 'Sat', d_sun: 'Sun',
 
@@ -1440,6 +1451,7 @@ main section[id] { scroll-margin-top: 124px; }
       t_buyin: 'Бай-ин', t_gtd: 'Байге фонду',
       today: 'Бүгүн',
       t_today_at: 'Бүгүн саат {time}', t_tomorrow_at: 'Эртең саат {time}', t_day_at: '{day} саат {time}', t_next: 'Жакынкы',
+      t_in_hm: '{h} саат {m} мүнөттөн кийин', t_in_h: '{h} сааттан кийин', t_in_m: '{m} мүнөттөн кийин', t_soon: 'азыр башталат',
       d_daily: 'Күн сайын', d_weekdays: 'Дш–Жм', d_weekend: 'Иш–Жк',
       d_mon: 'Дш', d_tue: 'Шш', d_wed: 'Шр', d_thu: 'Бш', d_fri: 'Жм', d_sat: 'Иш', d_sun: 'Жк',
 
@@ -1582,6 +1594,7 @@ main section[id] { scroll-margin-top: 124px; }
       t_buyin: 'Bay-in', t_gtd: 'Sovrin jamg‘armasi',
       today: 'Bugun',
       t_today_at: 'Bugun soat {time}', t_tomorrow_at: 'Ertaga soat {time}', t_day_at: '{day} soat {time}', t_next: 'Eng yaqin',
+      t_in_hm: '{h} soat {m} daqiqadan keyin', t_in_h: '{h} soatdan keyin', t_in_m: '{m} daqiqadan keyin', t_soon: 'hozir boshlanadi',
       d_daily: 'Har kuni', d_weekdays: 'Du–Ju', d_weekend: 'Sha–Ya',
       d_mon: 'Du', d_tue: 'Se', d_wed: 'Chor', d_thu: 'Pay', d_fri: 'Ju', d_sat: 'Sha', d_sun: 'Ya',
 
@@ -1905,23 +1918,50 @@ main section[id] { scroll-margin-top: 124px; }
         : tr('t_day_at').replace('{day}', tr('d_' + n.dow)).replace('{time}', n.time);
       return n.label ? when + ' · ' + n.label : when;
     }
+    // Обратный отсчёт: показываем, пока до старта меньше суток
+    function countdown(n) {
+      if (!n || n.delta >= 1440) return '';
+      if (n.delta < 1) return tr('t_soon');
+      var h = Math.floor(n.delta / 60), m = n.delta % 60;
+      if (!h) return tr('t_in_m').replace('{m}', m);
+      if (!m) return tr('t_in_h').replace('{h}', h);
+      return tr('t_in_hm').replace('{h}', h).replace('{m}', m);
+    }
+    // Идёт ли турнир сегодня (для подсветки прошедших стартов)
+    function runsToday(t) {
+      var today = clubNow().dow;
+      var days = [].concat.apply([], (Array.isArray(t.days) ? t.days : [t.days]).map(expandDays));
+      return days.some(function (x) {
+        if (x === 'daily') return true;
+        if (x === 'weekdays') return ['mon', 'tue', 'wed', 'thu', 'fri'].indexOf(today) !== -1;
+        if (x === 'weekend') return today === 'sat' || today === 'sun';
+        return x === today;
+      });
+    }
     var list = D.tournaments || [];
     var nexts = list.map(nextStart);
     var soonest = nexts.reduce(function (a, b) { return !b ? a : (!a || b.delta < a.delta) ? b : a; }, null);
 
     $('tournamentList').innerHTML = list.map(function (t, i) {
+      var next = nexts[i];
+      // Расписание: прошедшие сегодня старты гасим, ближайший подсвечиваем
+      var nowMin = clubNow().min;
       var times = (t.timesMsk || []).map(function (msk, k) {
         var label = (t.labels || [])[k];
-        return (label ? label + ' ' : '') + localTime(msk);
+        var time = localTime(msk);
+        var isNext = next && next.off === 0 && next.time === time;
+        var isPast = runsToday(t) && toMin(time) < nowMin && !isNext;
+        return '<span class="t-time' + (isPast ? ' is-past' : '') + (isNext ? ' is-next' : '') + '">' +
+          esc((label ? label + ' ' : '') + time) + '</span>';
       }).join(' · ');
-      var next = nexts[i];
       // Главный турнир недели (Knockout) — широкой карточкой
       return '<article class="card tour tour--' + esc(t.type) + (t.type === 'ko' ? ' tour--main' : '') + '">' +
         '<div class="tour__top"><span class="tour__type">' + esc(tr('ty_' + t.type)) + '</span>' +
           (next && soonest && next.delta === soonest.delta ? '<span class="tag">' + esc(tr('t_next')) + '</span>' : '') + '</div>' +
         '<h3>' + esc(t.name) + '</h3>' +
-        '<p class="tour__next">' + esc(nextText(next)) + '</p>' +
-        '<p class="tour__when">' + esc(dayLabel(t.days)) + ' · <b>' + esc(times) + '</b></p>' +
+        '<p class="tour__next">' + esc(nextText(next)) +
+          (countdown(next) ? '<span class="tour__in">' + esc(countdown(next)) + '</span>' : '') + '</p>' +
+        '<p class="tour__when">' + esc(dayLabel(t.days)) + ' · <b>' + times + '</b></p>' +
         '<dl>' +
           '<div><dt>' + esc(tr('t_gtd')) + '</dt><dd class="accent">' + usd(t.gtd) + '<small>' + usdChips(t.gtd) + '</small></dd></div>' +
           '<div><dt>' + esc(tr('t_buyin')) + '</dt><dd>' + (t.buyin ? usd(t.buyin) + '<small>' + usdChips(t.buyin) + '</small>' : esc(tr('t_free'))) + '</dd></div>' +
@@ -2239,7 +2279,7 @@ main section[id] { scroll-margin-top: 124px; }
   });
 
   renderAll();
-  setInterval(renderData, 60000); // баннер техработ и этап лидерборда без перезагрузки
+  setInterval(renderData, 30000); // отсчёт до турнира, баннер техработ и этап лидерборда
   loadLive();
   setInterval(loadLive, 5 * 60000); // столы пишутся раз в час — проверяем каждые 5 минут
 
