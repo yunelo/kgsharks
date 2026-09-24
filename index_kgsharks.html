@@ -152,6 +152,20 @@ a { color: var(--hi); }
   font: 800 .78rem var(--font-body); letter-spacing: .04em; cursor: pointer; transition: all .2s;
 }
 .lang button[aria-pressed="true"] { background: var(--hi); color: var(--bg); }
+/* Название языка: на телефоне коротко (РУС / КЫР / ENG), на компьютере целиком */
+.lang__full { display: none; }
+@media (max-width: 759px) {
+  .lang { padding: 2px; }
+  .lang button { padding: 6px 7px; font-size: .72rem; letter-spacing: 0; }
+  .brand span { font-size: .92rem; }
+}
+@media (max-width: 420px) { .brand span { font-size: .84rem; } .brand { gap: 8px; } .brand img { width: 36px; height: 36px; } }
+@media (max-width: 345px) { .brand span { display: none; } }
+@media (min-width: 760px) {
+  .lang button { padding: 6px 12px; letter-spacing: .02em; }
+  .lang__full { display: inline; }
+  .lang__short { display: none; }
+}
 @media (max-width: 440px) { .top .btn--sm { display: none; } }
 
 /* HERO */
@@ -1679,7 +1693,9 @@ main section[id] { scroll-margin-top: 124px; }
   };
 
   var LOCALE = { ru: 'ru-RU', ky: 'ky-KG', uz: 'uz-Latn-UZ', en: 'en-US' };
-  var LANG_LABEL = { ru: 'RU', ky: 'KG', uz: 'UZ', en: 'EN' };
+  // На компьютере показываем название языка целиком, на телефоне — коротко (CSS решает, что видно)
+  var LANG_NAME = { ru: 'Русский', ky: 'Кыргызча', uz: 'O‘zbekcha', en: 'English' };
+  var LANG_SHORT = { ru: 'РУС', ky: 'КЫР', uz: 'UZB', en: 'ENG' };
   var SUIT = { NLH: '♠', PLO4: '♦', PLO5: '♣', AoF: '♥' };
   var RED_SUIT = { '♦': 1, '♥': 1 }; // черви и бубны — красные, пики и трефы — в цвете клуба
   var M = C.schedule; // понедельник: техработы, рейкбэк, лидерборд; выводы
@@ -1846,7 +1862,9 @@ main section[id] { scroll-margin-top: 124px; }
     });
 
     $('langSwitch').innerHTML = C.langs.length > 1 ? C.langs.map(function (l) {
-      return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === lang) + '">' + LANG_LABEL[l] + '</button>';
+      return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === lang) + '" aria-label="' + esc(LANG_NAME[l] || l) + '">' +
+        '<span class="lang__full">' + esc(LANG_NAME[l] || l) + '</span>' +
+        '<span class="lang__short">' + esc(LANG_SHORT[l] || l) + '</span></button>';
     }).join('') : '';
 
     renderGames();
