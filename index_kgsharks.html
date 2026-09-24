@@ -2317,7 +2317,8 @@ main section[id] { scroll-margin-top: 124px; }
 //    Как и раньше, при ошибке Firebase кнопки всё равно включаются — игрок не должен застрять;
 //  - базовая запись уходит сразу, IP/гео дописываются следом (запись есть, даже если человек ушёл);
 //  - IP и гео одним запросом (ipinfo / ipapi параллельно), с таймаутами;
-//  - заходы без fbclid тоже пишутся — в отдельную ветку <club>_visits;
+//  - заходы без fbclid тоже пишутся — в отдельную ветку <club>_visits, а в бота уходит
+//    ?start=NOFBCLID-<ключ записи>, чтобы бот мог прочитать язык сайта, устройство, гео и UTM;
 //  - все кнопки с data-cta ведут в бота через один и тот же shortId.
 // ========================================
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -2597,6 +2598,8 @@ function loadLastAdSnapshot() {
 // ---------- state ----------
 const state = {
   shortId: null,       // идёт в ?start= бота (только рекламные заходы)
+  visitId: null,       // ключ записи в <club>_visits (заходы без рекламы)
+  startParam: null,    // что уходит в ?start= для заходов без рекламы: NOFBCLID-<visitId>
   trackingId: null,
   paramType: null,
   record: null,        // запись в <club>_fbclids
@@ -2605,7 +2608,8 @@ const state = {
 };
 
 function botLink() {
-  return `https://t.me/${C.bot}?start=${state.shortId || T.noTrackingStart}`;
+  // Реклама — ?start=<shortId>, органика — ?start=NOFBCLID-<ключ записи в _visits>
+  return `https://t.me/${C.bot}?start=${state.shortId || state.startParam || T.noTrackingStart}`;
 }
 
 function applyLinks() {
@@ -2649,9 +2653,13 @@ if (trackingId) {
     state.record = last.record;
     state.path = `${T.adBranch}/${state.shortId}`;
   } else if (T.visitsBranch) {
-    // Органика: запись в отдельную ветку, бот получает прежний NOFBCLID
-    state.path = `${T.visitsBranch}/${generateShortId()}`;
-    state.record = { ...buildRecord(null, 'none'), start_parameter: T.noTrackingStart };
+    // Органика: запись в отдельную ветку. В бота уходит NOFBCLID-<ключ записи>,
+    // чтобы бот мог прочитать <клуб>_visits/<ключ> — язык сайта, устройство, гео, UTM.
+    const visitId = generateShortId();
+    state.visitId = visitId;
+    state.startParam = `${T.noTrackingStart}-${visitId}`;
+    state.path = `${T.visitsBranch}/${visitId}`;
+    state.record = { ...buildRecord(null, 'none'), start_parameter: state.startParam };
   }
 
   fbqCustom('ProkladkaWithoutFbclid', {
